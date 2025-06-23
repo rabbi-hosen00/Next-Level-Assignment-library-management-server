@@ -67,3 +67,23 @@ A feature-rich RESTful API for managing library operations, developed using **Ex
   "copies": 5,
   "available": true
 }
+
+### Successful Response:
+{
+  "success": true,
+  "message": "Book created successfully",
+  "data": {
+    "_id": "60f123abc456def789012345",
+    "title": "The Theory of Everything",
+    "author": "Stephen Hawking",
+    "genre": "SCIENCE",
+    "isbn": "9780553380163",
+    "description": "An overview of cosmology and black holes.",
+    "copies": 5,
+    "available": true,
+    "createdAt": "2025-06-23T10:00:00.000Z",
+    "updatedAt": "2025-06-23T10:00:00.000Z"
+  }
+}
+
+
