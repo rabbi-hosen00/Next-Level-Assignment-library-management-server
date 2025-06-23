@@ -21,28 +21,6 @@ A feature-rich RESTful API for managing library operations, developed using **Ex
 
 ---
 
-## 📁 Project Structure
-src/
-├── config/ # DB connection & config
-├── modules/
-│ ├── book/ # Book module
-│ │ ├── book.controller.ts
-│ │ ├── book.interface.ts
-│ │ ├── book.model.ts
-│ │ └── book.route.ts
-│ └── borrow/ # Borrow module
-│ ├── borrow.controller.ts
-│ ├── borrow.interface.ts
-│ ├── borrow.model.ts
-│ └── borrow.route.ts
-├── routes/
-│ └── index.ts # Merges all routes
-├── server.ts # Application entry point
-.env # Environment variables
-package.json
-tsconfig.json
-README.md
-
 
 ---
 
