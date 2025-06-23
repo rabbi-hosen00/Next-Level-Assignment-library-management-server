@@ -69,6 +69,7 @@ A feature-rich RESTful API for managing library operations, developed using **Ex
 }
 
 ### Successful Response:
+
 {
   "success": true,
   "message": "Book created successfully",
