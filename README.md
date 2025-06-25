@@ -6,9 +6,9 @@ A feature-rich RESTful API for managing library operations, developed using **Ex
 
 ## 🚀 Live Demo
 
-🔗 **Live URL**: [Deploy Link Here](https://your-deployment-url.com)
+🔗 **Live URL**: [Deploy Link Here](https://libary-management-backend-six.vercel.app/api/books)
 
-🎥 **Video Walkthrough**: [Watch Here](https://your-video-link.com)
+🎥 **Video Walkthrough**: [Watch Here]( libary-management-backend-six.vercel.app)
 
 ---
 
