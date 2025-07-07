@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 
 
-const createBook :any = async (req: Request, res: Response) => {
+const createBook: any = async (req: Request, res: Response) => {
   try {
     const data = await Book.create(req.body);
     res.send({
@@ -14,9 +14,9 @@ const createBook :any = async (req: Request, res: Response) => {
       message: "book created successfully",
       data,
     });
-  } 
-  catch (error:any) {
-   if (error instanceof mongoose.Error.ValidationError) {
+  }
+  catch (error: any) {
+    if (error instanceof mongoose.Error.ValidationError) {
       //  Handle schema validation error
       return res.status(400).json({
         message: "Validation failed",
@@ -25,37 +25,87 @@ const createBook :any = async (req: Request, res: Response) => {
       });
     }
     // Handle other errors
-  //   return res.status(500).json({
-  //     message: "Failed to create book",
-  //     success: false,
-  //     error: error instanceof Error ? error.message : "Unknown error",
-  // });
+    //   return res.status(500).json({
+    //     message: "Failed to create book",
+    //     success: false,
+    //     error: error instanceof Error ? error.message : "Unknown error",
+    // });
   }
-  }
+}
 
 
-// get all Books
+
+
+// const getBooks = async (req: Request, res: Response) => {
+//   try {
+//     const userGenre = typeof req.query.filter === 'string' ? req.query.filter.trim() : "";
+    
+//     // ✅ Get limit from query, fallback to 10
+//     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 10;
+
+//     console.log("userGenre:", userGenre);
+//     console.log("limit:", limit);
+
+//     let data = [];
+
+//     if (userGenre) {
+//       data = await Book.find({
+//         genre: { $regex: new RegExp(`^${userGenre}$`, "i") }  // Case-insensitive match
+//       }).sort({ createdAt: -1 }).limit(limit);
+//     } else {
+//       data = await Book.find().sort({ createdAt: -1 }).limit(limit);
+//     }
+
+//     res.send({
+//       success: true,
+//       message: "Books fetched successfully",
+//       data,
+//     });
+
+//   } catch (error) {
+//     res.status(500).send({
+//       success: false,
+//       message: "Failed to get books",
+//       error: error instanceof Error ? error.message : "Unknown error",
+//     });
+//   }
+// };
+
 
 const getBooks = async (req: Request, res: Response) => {
   try {
-    const userGenre = req.query.genre ? req.query.genre : "";
-    const limit = 10;
+    const userGenre = typeof req.query.filter === 'string' ? req.query.filter.trim() : "";
 
-    let data= []
-    if(userGenre){
-      data= await Book.find({ genre: userGenre})
-    }else{
-      data= await Book.find().sort({createdAt : "desc"}).limit(limit)
+    // ✅ Dynamic limit (default: 10)
+    const rawLimit = parseInt(req.query.limit as string, 10);
+    const limit = !isNaN(rawLimit) && rawLimit > 0 ? rawLimit : 10;
+
+    // ✅ Dynamic sortBy and sort direction (default: createdAt desc)
+    const sortBy = typeof req.query.sortBy === 'string' ? req.query.sortBy : 'createdAt';
+    const sortOrder = req.query.sort === 'asc' ? 1 : -1; // asc = 1, desc = -1
+
+    console.log("userGenre:", userGenre);
+    console.log("limit:", limit);
+    console.log("sortBy:", sortBy);
+    console.log("sortOrder:", sortOrder);
+
+    let data = [];
+
+    if (userGenre) {
+      data = await Book.find({
+        genre: { $regex: new RegExp(`^${userGenre}$`, "i") }
+      }).sort({ [sortBy]: sortOrder }).limit(limit);
+    } else {
+      data = await Book.find().sort({ [sortBy]: sortOrder }).limit(limit);
     }
-    
-  
+
     res.send({
       success: true,
-      message: "book getting successfully",
+      message: "Books fetched successfully",
       data,
     });
-  } 
-  catch (error) {
+
+  } catch (error) {
     res.status(500).send({
       success: false,
       message: "Failed to get books",
@@ -64,23 +114,45 @@ const getBooks = async (req: Request, res: Response) => {
   }
 };
 
-const getBookById = async (req: Request, res: Response) => {
+
+
+const getBookById: any = async (req: Request, res: Response) => {
   try {
     const bookId = req.params.bookId;
+
+    if (!mongoose.Types.ObjectId.isValid(bookId)) {
+      return res.status(400).send({
+        success: false,
+        message: "Invalid book ID format",
+      });
+    }
+
     const data = await Book.findById(bookId);
+
+
+
+    if (!data) {
+      return res.status(404).send({
+        success: false,
+        message: "Book not found",
+      });
+    }
+
     res.send({
       success: true,
-      message: "book fetched successfully",
+      message: "Book fetched successfully",
       data,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      message: "Failed to get mango",
+      message: "Failed to get book",
       error: error instanceof Error ? error.message : "Unknown error",
     });
   }
 };
+
+
 
 const updateBook = async (req: Request, res: Response) => {
   try {
@@ -95,7 +167,7 @@ const updateBook = async (req: Request, res: Response) => {
       message: "book updated successfully",
       data,
     });
-  } 
+  }
   catch (error) {
     res.status(500).send({
       success: false,
@@ -131,6 +203,10 @@ export const bookController = {
   updateBook,
   deleteBookById,
 };
+
+
+
+
 
 
 
